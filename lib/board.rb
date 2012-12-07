@@ -8,7 +8,9 @@ class Board
     index = generate_index(@history)
     words = find_words(move, index)
     @history << move
-    words.inject(0) { |score, word| score + score_word(word) }
+    score = words.inject(0) { |score, word| score + score_word(word) }
+    tiles_used = calculate_tiles_used(move, index)
+    [score, tiles_used]
   end
 
   private
@@ -70,5 +72,15 @@ class Board
 
   def score_word(word)
     word.each_char.inject(0) { |score, c| score + @values[c] }
+  end
+
+  def calculate_tiles_used(move, index)
+    used = []
+    move.word.each_char.with_index do |char, i|
+      next if index[move.position.shift(i, move.direction)]
+      used << char
+    end
+
+    used
   end
 end

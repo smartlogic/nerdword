@@ -10,7 +10,7 @@ describe Board do
       "T" => 8
     }
     board = Board.new(values)
-    score = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score, tiles_used = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
 
     score.should eq(14)
   end
@@ -30,8 +30,23 @@ describe Board do
     #  TIN
 
     board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+    score, tiles_used = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
 
     score.should eq(8)
+  end
+
+  it "returns the tiles used to make the play" do
+    values = {
+      "C" => 2,
+      "A" => 4,
+      "T" => 8,
+      "S" => 1
+    }
+    board = Board.new(values)
+    score1, tiles_used1 = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score2, tiles_used2 = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL))
+
+    tiles_used1.should eq(%w{C A T})
+    tiles_used2.should eq(%w{S})
   end
 end

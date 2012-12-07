@@ -14,7 +14,7 @@ describe "Game" do
     }
 
     board = Board.new(values)
-    pouch = Pouch.new([])
+    pouch = Pouch.new(%w{I O C A S B P S O D E}, Random.new(1))
 
     p1 = Player.new(board, pouch)
     p2 = Player.new(board, pouch)

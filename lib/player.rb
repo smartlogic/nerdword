@@ -8,8 +8,12 @@ class Player
     @tiles = []
   end
 
-  def play(word)
-    @score += @board.play(word)
+  def play(move)
+    score, tiles_used = @board.play(move)
+    @score += score
+    tiles_used.each do |tile|
+      @tiles.slice!(@tiles.index(tile))
+    end
   end
 
   def score

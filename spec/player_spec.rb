@@ -21,9 +21,19 @@ describe Player do
     expect { player.draw }.to change(player, :tiles).to(%w{A B C D E F})
   end
 
+  it "uses up tiles to make a move" do
+    pouch.stub(:draw).and_return(%w{A B C D E})
+    board.stub(:play).and_return([1, %w{A C E}])
+
+    player.draw
+    player.play(Move.new("", Position.new(0, 0), Direction::HORIZONTAL))
+
+    player.tiles.should eq(%w{B D})
+  end
+
   it "records her score" do
     move = Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL)
-    board.stub(:play).with(move).and_return(1)
+    board.stub(:play).with(move).and_return([1, []])
 
     player.play(move)
 
@@ -31,10 +41,10 @@ describe Player do
   end
   
   it "add the scores of multiple plays" do
-    board.stub(:play).and_return(1)
-    
-    player.play(stub)
-    player.play(stub)
+    board.stub(:play).and_return([1, []])
+
+    player.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    player.play(Move.new("COT", Position.new(0, 0), Direction::VERTICAL))
 
     player.score.should eq(2)
   end
