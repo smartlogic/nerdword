@@ -1,5 +1,7 @@
 require "player"
 require "board"
+require "move"
+require "position"
 
 describe "Game" do
   it "plays a round" do
@@ -14,8 +16,8 @@ describe "Game" do
     p1 = Player.new(board)
     p2 = Player.new(board)
 
-    p1.play("POO")
-    p2.play("PISS")
+    p1.play(Move.new("POO", Position.new(0, 0), Direction::HORIZONTAL))
+    p2.play(Move.new("PISS", Position.new(0, 0), Direction::VERTICAL))
 
     p1.score.should == 6
     p2.score.should == 7
