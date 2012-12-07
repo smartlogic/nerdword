@@ -2,7 +2,7 @@ require "player"
 require "board"
 require "move"
 require "position"
-require "deterministic_pouch"
+require "pouch"
 
 describe "Game" do
   it "plays a round" do
@@ -14,7 +14,7 @@ describe "Game" do
     }
 
     board = Board.new(values)
-    pouch = DeterministicPouch.new([])
+    pouch = Pouch.new([])
 
     p1 = Player.new(board, pouch)
     p2 = Player.new(board, pouch)
