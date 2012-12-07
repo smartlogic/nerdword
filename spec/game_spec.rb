@@ -2,6 +2,7 @@ require "player"
 require "board"
 require "move"
 require "position"
+require "deterministic_pouch"
 
 describe "Game" do
   it "plays a round" do
@@ -13,8 +14,13 @@ describe "Game" do
     }
 
     board = Board.new(values)
-    p1 = Player.new(board, nil)
-    p2 = Player.new(board, nil)
+    pouch = DeterministicPouch.new([])
+
+    p1 = Player.new(board, pouch)
+    p2 = Player.new(board, pouch)
+
+    p1.draw
+    p2.draw
 
     p1.play(Move.new("POO", Position.new(0, 0), Direction::HORIZONTAL))
     p2.play(Move.new("PISS", Position.new(0, 0), Direction::VERTICAL))
