@@ -4,7 +4,22 @@ require "position"
 
 describe Player do
   let(:board) { mock }
-  let(:player) { Player.new(board) }
+  let(:pouch) { mock }
+  let(:player) { Player.new(board, pouch) }
+
+  it "draws tiles from the pouch" do
+    pouch.stub(:draw).with(7).and_return(%w{A B C})
+
+    expect { player.draw }.to change(player, :tiles).to(%w{A B C})
+  end
+
+  it "only draws the tiles needed" do
+    pouch.stub(:draw).with(4).and_return(%w{D E F})
+
+    player.tiles.concat(%w{A B C})
+
+    expect { player.draw }.to change(player, :tiles).to(%w{A B C D E F})
+  end
 
   it "records her score" do
     move = Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL)

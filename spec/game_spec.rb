@@ -13,8 +13,8 @@ describe "Game" do
     }
 
     board = Board.new(values)
-    p1 = Player.new(board)
-    p2 = Player.new(board)
+    p1 = Player.new(board, nil)
+    p2 = Player.new(board, nil)
 
     p1.play(Move.new("POO", Position.new(0, 0), Direction::HORIZONTAL))
     p2.play(Move.new("PISS", Position.new(0, 0), Direction::VERTICAL))
