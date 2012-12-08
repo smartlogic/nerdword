@@ -5,7 +5,13 @@ class Pouch
   end
 
   def draw(num)
-    @tiles.shuffle!(:random => @rng)
+    shuffle
     @tiles.shift(num)
+  end
+
+  private
+
+  def shuffle
+    @tiles.sort_by! { @rng.rand }
   end
 end

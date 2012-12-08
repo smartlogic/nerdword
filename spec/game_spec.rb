@@ -3,6 +3,7 @@ require "board"
 require "move"
 require "position"
 require "pouch"
+require "not_random"
 
 describe "Game" do
   it "plays a round" do
@@ -14,7 +15,7 @@ describe "Game" do
     }
 
     board = Board.new(values)
-    pouch = Pouch.new(%w{I O C A S B P S O D E}, Random.new(1))
+    pouch = Pouch.new(%w{P O O X X X X I S S}, NotRandom.new)
 
     p1 = Player.new(board, pouch)
     p2 = Player.new(board, pouch)
