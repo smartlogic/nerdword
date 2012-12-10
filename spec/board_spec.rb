@@ -43,7 +43,18 @@ describe Board do
     score.should eq(16)
   end
 
-  it "doesn't count letter multipliers twice" do
+  it "scores letter multipliers in every word formed" do
+    values = Hash.new(1)
+    letter_multipliers = { Position.new(1, 1) => 2 }
+    board = Board.new(values, letter_multipliers)
+
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score, _ = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+
+    score.should eq(9)
+  end
+
+  it "only counts letter multipliers played this turn" do
     values = { ?C => 2, ?A => 4, ?T => 8, ?S => 1 }
     letter_multipliers = { Position.new(0, 0) => 2 }
     board = Board.new(values, letter_multipliers)
@@ -62,6 +73,17 @@ describe Board do
     score, _ = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
 
     score.should eq(28)
+  end
+
+  it "scores word multipliers in every word formed" do
+    values = Hash.new(1)
+    word_multipliers = { Position.new(1, 1) => 2 }
+    board = Board.new(values, {}, word_multipliers)
+
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score, _ = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+
+    score.should eq(12)
   end
 
   it "doesn't count word multipliers twice" do
