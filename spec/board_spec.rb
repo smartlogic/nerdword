@@ -74,4 +74,13 @@ describe Board do
 
     score.should eq(15)
   end
+
+  it "scores a 50 point bingo bonus" do
+    values = Hash.new(1)
+    board = Board.new(values)
+
+    score, _ = board.play(Move.new("RAMRODS", Position.new(0, 0), Direction::HORIZONTAL))
+
+    score.should eq(57)
+  end
 end

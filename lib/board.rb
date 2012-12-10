@@ -74,6 +74,7 @@ class Board
 
   def score_move(move, index)
     word_multiplier = 1
+    bonus = move.word.length >= 7 ? 50 : 0
     move.word.each_char.with_index.inject(0) do |score, (c, i)|
       pos = move.position.shift(i, move.direction)
       if index[pos]
@@ -82,7 +83,7 @@ class Board
         word_multiplier *= @word_multipliers.fetch(pos, 1)
         score + @values[c] * @letter_multipliers.fetch(pos, 1)
       end
-    end * word_multiplier
+    end * word_multiplier + bonus
   end
 
   def score_word(word)
