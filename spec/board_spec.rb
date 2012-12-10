@@ -32,4 +32,25 @@ describe Board do
     tiles_used1.should eq(%w{C A T})
     tiles_used2.should eq(%w{S})
   end
+
+  it "scores letter multipliers" do
+    values = { ?C => 2, ?A => 4, ?T => 8 }
+    letter_multipliers = { Position.new(0, 0) => 2 }
+    board = Board.new(values, letter_multipliers)
+
+    score, _ = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+
+    score.should eq(16)
+  end
+
+  it "doesn't count letter multipliers twice" do
+    values = { ?C => 2, ?A => 4, ?T => 8, ?S => 1 }
+    letter_multipliers = { Position.new(0, 0) => 2 }
+    board = Board.new(values, letter_multipliers)
+
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score, _ = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL))
+
+    score.should eq(15)
+  end
 end

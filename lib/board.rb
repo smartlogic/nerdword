@@ -1,6 +1,7 @@
 class Board
-  def initialize(values)
+  def initialize(values, letter_multipliers = {})
     @values = values
+    @letter_multipliers = letter_multipliers
     @history = []
   end
 
@@ -8,7 +9,7 @@ class Board
     index = generate_index(@history)
     words = find_words(move, index)
     @history << move
-    score = words.inject(0) { |score, word| score + score_word(word) }
+    score = score_move(move, index) + words.inject(0) { |score, word| score + score_word(word) }
     tiles_used = calculate_tiles_used(move, index)
     [score, tiles_used]
   end
@@ -16,7 +17,7 @@ class Board
   private
 
   def find_words(move, index)
-    words = [move.word]
+    words = []
 
     direction = move.direction
     orthogonal_direction = Direction.opposite(direction)
@@ -68,6 +69,17 @@ class Board
     end
 
     index
+  end
+
+  def score_move(move, index)
+    move.word.each_char.with_index.inject(0) do |score, (c, i)|
+      pos = move.position.shift(i, move.direction)
+      if index[pos]
+        score + @values[c]
+      else
+        score + @values[c] * @letter_multipliers.fetch(pos, 1)
+      end
+    end
   end
 
   def score_word(word)
