@@ -76,7 +76,7 @@ class Board
   def score_move(move, index)
     word_multiplier = 1
     bonus = move.word.length >= 7 ? 50 : 0
-    move.word.each_char.with_index.inject(0) do |score, (c, i)|
+    score = move.word.each_char.with_index.inject(0) do |score, (c, i)|
       pos = move.position.shift(i, move.direction)
       if index[pos]
         score + @values[c]
@@ -85,6 +85,7 @@ class Board
         score + @values[c] * @letter_multipliers.fetch(pos, 1)
       end
     end * word_multiplier + bonus
+    score
   end
 
   def calculate_tiles_used(move, index)
