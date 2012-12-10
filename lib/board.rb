@@ -1,7 +1,8 @@
 class Board
-  def initialize(values, letter_multipliers = {})
+  def initialize(values, letter_multipliers = {}, word_multipliers = {})
     @values = values
     @letter_multipliers = letter_multipliers
+    @word_multipliers = word_multipliers
     @history = []
   end
 
@@ -72,14 +73,16 @@ class Board
   end
 
   def score_move(move, index)
+    word_multiplier = 1
     move.word.each_char.with_index.inject(0) do |score, (c, i)|
       pos = move.position.shift(i, move.direction)
       if index[pos]
         score + @values[c]
       else
+        word_multiplier *= @word_multipliers.fetch(pos, 1)
         score + @values[c] * @letter_multipliers.fetch(pos, 1)
       end
-    end
+    end * word_multiplier
   end
 
   def score_word(word)
