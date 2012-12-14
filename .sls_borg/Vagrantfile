@@ -1,0 +1,6 @@
+Vagrant::Config.run do |config|
+  config.vm.box = 'nerdword'
+  config.vm.box_url = 'http://borg.slsdev.net/vagrant_boxes/nerdword.box'
+  config.vm.share_folder 'nerdword', '/nerdword', '../'
+  config.vm.customize [ 'modifyvm', :id, '--memory', 1024, '--cpus', 2]
+end
