@@ -1,11 +1,11 @@
 class Player
   attr_reader :tiles
 
-  def initialize(board, pouch)
+  def initialize(board, pouch, tiles = [])
     @board = board
     @pouch = pouch
     @score = 0
-    @tiles = []
+    @tiles = tiles
   end
 
   def play(move)
