@@ -24,4 +24,9 @@ class Player
     need = 7 - tiles.length
     tiles.concat(@pouch.draw(need))
   end
+
+  def exchange(tiles)
+    @tiles = @tiles - tiles
+    @tiles.concat(@pouch.exchange(tiles))
+  end
 end

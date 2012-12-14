@@ -11,4 +11,12 @@ describe Pouch do
     draw1.should eq(%w{A B C D})
     draw2.should eq(%w{E F G})
   end
+
+  it "allows players to exchange tiles" do
+    tiles = %w{A B C D E F G}
+    pouch = Pouch.new(tiles, NotRandom.new)
+
+    pouch.exchange(%w{X Y Z}).should eq(%w{A B C})
+    tiles.should eq(%w{D E F G X Y Z})
+  end
 end

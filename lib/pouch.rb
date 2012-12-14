@@ -9,6 +9,12 @@ class Pouch
     @tiles.shift(num)
   end
 
+  def exchange(tiles)
+    new_tiles = draw(tiles.length)
+    @tiles.concat(tiles)
+    new_tiles
+  end
+
   private
 
   def shuffle

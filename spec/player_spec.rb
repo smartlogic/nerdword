@@ -21,6 +21,16 @@ describe Player do
     expect { player.draw }.to change(player, :tiles).to(%w{A B C D E F})
   end
 
+  it "exchanges tiles with new ones from the pouch" do
+    pouch.stub(:draw).with(7).and_return(%w{A B C D E F G})
+    pouch.stub(:exchange).with(%w{A B C}).and_return(%w{X Y Z})
+
+    player.draw
+    player.exchange(%w{A B C})
+
+    player.tiles.should eq(%w{D E F G X Y Z})
+  end
+
   it "uses up tiles to make a move" do
     pouch.stub(:draw).and_return(%w{A B C D E})
     board.stub(:play).and_return([1, %w{A C E}])
