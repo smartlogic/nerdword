@@ -7,37 +7,43 @@ describe Player do
   let(:pouch) { mock }
 
   it "draws tiles from the pouch" do
-    player = Player.new(board, pouch)
+    rack = []
+    player = Player.new(board, pouch, rack)
 
     pouch.stub(:draw).with(7).and_return(%w{A B C})
+    player.draw
 
-    expect { player.draw }.to change(player, :tiles).to(%w{A B C})
+    rack.should eq(%w{A B C})
   end
 
   it "only draws the tiles needed" do
-    player = Player.new(board, pouch, %w{A B C})
+    rack = %w{A B C}
+    player = Player.new(board, pouch, rack)
 
     pouch.stub(:draw).with(4).and_return(%w{D E F})
+    player.draw
 
-    expect { player.draw }.to change(player, :tiles).to(%w{A B C D E F})
+    rack.should eq(%w{A B C D E F})
   end
 
   it "exchanges tiles with new ones from the pouch" do
-    player = Player.new(board, pouch, %w{A B C D E F G})
+    rack = %w{A B C D E F G}
+    player = Player.new(board, pouch, rack)
 
     pouch.stub(:exchange).with(%w{A B C}).and_return(%w{X Y Z})
     player.exchange(%w{A B C})
 
-    player.tiles.should eq(%w{D E F G X Y Z})
+    rack.should eq(%w{D E F G X Y Z})
   end
 
   it "uses up tiles to make a move" do
-    player = Player.new(board, pouch, %w{A B C D E})
+    rack = %w{A B C D E}
+    player = Player.new(board, pouch, rack)
 
     board.stub(:play).and_return([1, %w{A C E}])
     player.play(Move.new("", Position.new(0, 0), Direction::HORIZONTAL))
 
-    player.tiles.should eq(%w{B D})
+    rack.should eq(%w{B D})
   end
 
   it "records her score" do

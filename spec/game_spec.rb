@@ -117,8 +117,10 @@ describe "Game" do
     board = Board.new(values, letter_multipliers, word_multipliers)
     pouch = Pouch.new(tiles, shuffle)
 
-    p1 = Player.new(board, pouch)
-    p2 = Player.new(board, pouch)
+    p1_rack = []
+    p2_rack = []
+    p1 = Player.new(board, pouch, p1_rack)
+    p2 = Player.new(board, pouch, p2_rack)
 
     moves = [
       Move.new("TOOTING", Position.new(3, 7), Direction::HORIZONTAL),
@@ -154,7 +156,7 @@ describe "Game" do
       p2.play(move2)
     end
 
-    p1_unplayed = values.values_at(*p1.tiles).inject(0, :+)
+    p1_unplayed = values.values_at(*p1_rack).inject(0, :+)
 
     p1.score.should eq(422)
     (p2.score + p1_unplayed * 2).should eq(409)

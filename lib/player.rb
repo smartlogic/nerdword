@@ -1,19 +1,15 @@
 class Player
-  attr_reader :tiles
-
-  def initialize(board, pouch, tiles = [])
+  def initialize(board, pouch, rack = [])
     @board = board
     @pouch = pouch
     @score = 0
-    @tiles = tiles
+    @rack = rack
   end
 
   def play(move)
     score, tiles_used = @board.play(move)
     @score += score
-    tiles_used.each do |tile|
-      @tiles.slice!(@tiles.index(tile))
-    end
+    remove_tiles(tiles_used)
   end
 
   def score
@@ -21,12 +17,20 @@ class Player
   end
 
   def draw
-    need = 7 - tiles.length
-    tiles.concat(@pouch.draw(need))
+    need = 7 - @rack.length
+    @rack.concat(@pouch.draw(need))
   end
 
   def exchange(tiles)
-    @tiles = @tiles - tiles
-    @tiles.concat(@pouch.exchange(tiles))
+    remove_tiles(tiles)
+    @rack.concat(@pouch.exchange(tiles))
+  end
+
+  private
+
+  def remove_tiles(tiles)
+    tiles.each do |tile|
+      @rack.slice!(@rack.index(tile))
+    end
   end
 end
