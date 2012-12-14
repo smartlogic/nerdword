@@ -12,6 +12,9 @@ class Board
     @history << move
     score = moves.inject(0) { |score, move| score + score_move(move, index) }
     tiles_used = calculate_tiles_used(move, index)
+    if tiles_used.length == 7
+      score += 50
+    end
     [score, tiles_used]
   end
 
@@ -75,7 +78,6 @@ class Board
 
   def score_move(move, index)
     word_multiplier = 1
-    bonus = move.word.length >= 7 ? 50 : 0
     score = move.word.each_char.with_index.inject(0) do |score, (c, i)|
       pos = move.position.shift(i, move.direction)
       if index[pos]
@@ -84,7 +86,7 @@ class Board
         word_multiplier *= @word_multipliers.fetch(pos, 1)
         score + @values[c] * @letter_multipliers.fetch(pos, 1)
       end
-    end * word_multiplier + bonus
+    end * word_multiplier
     score
   end
 

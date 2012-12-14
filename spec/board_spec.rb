@@ -105,4 +105,14 @@ describe Board do
 
     score.should eq(57)
   end
+
+  it "only gives bingo bonus if 7 tiles are used" do
+    values = Hash.new(1)
+    board = Board.new(values)
+
+    board.play(Move.new("RAM", Position.new(0, 0), Direction::HORIZONTAL))
+    score, _ = board.play(Move.new("RAMRODS", Position.new(1, 0), Direction::HORIZONTAL))
+
+    score.should eq(7)
+  end
 end
