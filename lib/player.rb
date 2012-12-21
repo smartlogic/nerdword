@@ -7,9 +7,7 @@ class Player
   end
 
   def play(move)
-    score, tiles_used = @board.play(move)
-    @score += score
-    remove_tiles(tiles_used)
+    @score += @board.play(move, @rack)
   end
 
   def score

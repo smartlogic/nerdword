@@ -7,7 +7,7 @@ describe Board do
     values = { ?C => 2, ?A => 4, ?T => 8 }
     board = Board.new(values)
 
-    score, _ = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
 
     score.should eq(14)
   end
@@ -16,21 +16,22 @@ describe Board do
     values = { ?C => 4, ?A => 1, ?T => 1, ?I => 1, ?N => 2 }
     board = Board.new(values)
 
-    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
+    score = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL), %w{T I N})
 
     score.should eq(8)
   end
 
-  it "returns the tiles used to make the play" do
-    values = { ?C => 1, ?A => 4, ?T => 8, ?S => 1 }
+  it "uses up tiles from the rack" do
+    values = Hash.new(1)
     board = Board.new(values)
+    rack = %w{C A T S}
 
-    _, tiles_used1 = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    _, tiles_used2 = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), rack)
+    rack.should eq(%w{S})
 
-    tiles_used1.should eq(%w{C A T})
-    tiles_used2.should eq(%w{S})
+    board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL), rack)
+    rack.should be_empty
   end
 
   it "scores letter multipliers" do
@@ -38,7 +39,7 @@ describe Board do
     letter_multipliers = { Position.new(0, 0) => 2 }
     board = Board.new(values, letter_multipliers)
 
-    score, _ = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
 
     score.should eq(16)
   end
@@ -48,8 +49,8 @@ describe Board do
     letter_multipliers = { Position.new(1, 1) => 2 }
     board = Board.new(values, letter_multipliers)
 
-    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
+    score = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL), %w{T I N})
 
     score.should eq(9)
   end
@@ -59,8 +60,8 @@ describe Board do
     letter_multipliers = { Position.new(0, 0) => 2 }
     board = Board.new(values, letter_multipliers)
 
-    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
+    score = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL), %w{S})
 
     score.should eq(15)
   end
@@ -70,7 +71,7 @@ describe Board do
     word_multipliers = { Position.new(0, 0) => 2 }
     board = Board.new(values, {}, word_multipliers)
 
-    score, _ = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
+    score = board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
 
     score.should eq(28)
   end
@@ -80,8 +81,8 @@ describe Board do
     word_multipliers = { Position.new(1, 1) => 2 }
     board = Board.new(values, {}, word_multipliers)
 
-    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
+    score  = board.play(Move.new("TIN", Position.new(1, 1), Direction::HORIZONTAL), %w{T I N})
 
     score.should eq(12)
   end
@@ -91,8 +92,8 @@ describe Board do
     word_multipliers = { Position.new(0, 0) => 2 }
     board = Board.new(values, {}, word_multipliers)
 
-    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL))
+    board.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL), %w{C A T})
+    score = board.play(Move.new("CATS", Position.new(0, 0), Direction::HORIZONTAL), %w{S})
 
     score.should eq(15)
   end
@@ -101,7 +102,7 @@ describe Board do
     values = Hash.new(1)
     board = Board.new(values)
 
-    score, _ = board.play(Move.new("RAMRODS", Position.new(0, 0), Direction::HORIZONTAL))
+    score = board.play(Move.new("RAMRODS", Position.new(0, 0), Direction::HORIZONTAL), %w{R A M R O D S})
 
     score.should eq(57)
   end
@@ -110,8 +111,8 @@ describe Board do
     values = Hash.new(1)
     board = Board.new(values)
 
-    board.play(Move.new("RAM", Position.new(0, 0), Direction::HORIZONTAL))
-    score, _ = board.play(Move.new("RAMRODS", Position.new(1, 0), Direction::HORIZONTAL))
+    board.play(Move.new("RAM", Position.new(0, 0), Direction::HORIZONTAL), %w{R A M})
+    score = board.play(Move.new("RAMRODS", Position.new(0, 0), Direction::HORIZONTAL), %w{R O D S})
 
     score.should eq(7)
   end

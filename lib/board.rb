@@ -6,16 +6,19 @@ class Board
     @history = []
   end
 
-  def play(move)
+  def play(move, rack)
     index = generate_index(@history)
     moves = find_moves(move, index)
     @history << move
     score = moves.inject(0) { |score, move| score + score_move(move, index) }
     tiles_used = calculate_tiles_used(move, index)
+    tiles_used.each do |tile|
+      rack.slice!(rack.index(tile))
+    end
     if tiles_used.length == 7
       score += 50
     end
-    [score, tiles_used]
+    score
   end
 
   private

@@ -36,20 +36,20 @@ describe Player do
     rack.should eq(%w{D E F G X Y Z})
   end
 
-  it "uses up tiles to make a move" do
-    rack = %w{A B C D E}
+  it "plays a move on the board using her rack" do
+    rack = %w{C A T}
     player = Player.new(board, pouch, rack)
+    move = Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL)
 
-    board.stub(:play).and_return([1, %w{A C E}])
-    player.play(Move.new("", Position.new(0, 0), Direction::HORIZONTAL))
+    board.should_receive(:play).with(move, rack).and_return(0)
 
-    rack.should eq(%w{B D})
+    player.play(move)
   end
 
   it "records her score" do
     player = Player.new(board, pouch)
     move = Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL)
-    board.stub(:play).with(move).and_return([1, []])
+    board.stub(:play).and_return(1)
 
     player.play(move)
 
@@ -58,7 +58,7 @@ describe Player do
   
   it "add the scores of multiple plays" do
     player = Player.new(board, pouch)
-    board.stub(:play).and_return([1, []])
+    board.stub(:play).and_return(1)
 
     player.play(Move.new("CAT", Position.new(0, 0), Direction::HORIZONTAL))
     player.play(Move.new("COT", Position.new(0, 0), Direction::VERTICAL))
