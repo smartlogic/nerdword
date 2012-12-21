@@ -15,20 +15,10 @@ class Player
   end
 
   def draw
-    need = 7 - @rack.length
-    @rack.concat(@pouch.draw(need))
+    @pouch.draw(@rack)
   end
 
   def exchange(tiles)
-    remove_tiles(tiles)
-    @rack.concat(@pouch.exchange(tiles))
-  end
-
-  private
-
-  def remove_tiles(tiles)
-    tiles.each do |tile|
-      @rack.slice!(@rack.index(tile))
-    end
+    @pouch.exchange(tiles, @rack)
   end
 end

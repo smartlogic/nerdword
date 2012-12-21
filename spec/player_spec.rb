@@ -10,30 +10,18 @@ describe Player do
     rack = []
     player = Player.new(board, pouch, rack)
 
-    pouch.stub(:draw).with(7).and_return(%w{A B C})
+    pouch.should_receive(:draw).with(rack)
+
     player.draw
-
-    rack.should eq(%w{A B C})
-  end
-
-  it "only draws the tiles needed" do
-    rack = %w{A B C}
-    player = Player.new(board, pouch, rack)
-
-    pouch.stub(:draw).with(4).and_return(%w{D E F})
-    player.draw
-
-    rack.should eq(%w{A B C D E F})
   end
 
   it "exchanges tiles with new ones from the pouch" do
     rack = %w{A B C D E F G}
     player = Player.new(board, pouch, rack)
 
-    pouch.stub(:exchange).with(%w{A B C}).and_return(%w{X Y Z})
-    player.exchange(%w{A B C})
+    pouch.should_receive(:exchange).with(%w{A B C}, rack)
 
-    rack.should eq(%w{D E F G X Y Z})
+    player.exchange(%w{A B C})
   end
 
   it "plays a move on the board using her rack" do

@@ -4,20 +4,27 @@ class Pouch
     @rng = rng
   end
 
-  def draw(num)
+  def draw(rack)
+    need = 7 - rack.length
     shuffle
-    @tiles.shift(num)
+    rack.concat(@tiles.shift(need))
   end
 
-  def exchange(tiles)
-    new_tiles = draw(tiles.length)
+  def exchange(tiles, rack)
+    remove_tiles(tiles, rack)
+    draw(rack)
     @tiles.concat(tiles)
-    new_tiles
   end
 
   private
 
   def shuffle
     @tiles.sort_by! { @rng.rand }
+  end
+
+  def remove_tiles(tiles, rack)
+    tiles.each do |tile|
+      rack.slice!(rack.index(tile))
+    end
   end
 end
