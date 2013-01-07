@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    nerdword (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -16,4 +21,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  nerdword!
   rspec
